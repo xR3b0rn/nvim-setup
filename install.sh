@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install prerequesites
-apt-get install ninja-build gettext cmake unzip curl python3 python3-pip
+apt-get install -y ninja-build gettext cmake unzip curl python3 python3-pip
 
 # Install neovim
 git clone https://github.com/neovim/neovim && cd neovim

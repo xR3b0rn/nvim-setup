@@ -13,3 +13,5 @@ git clone --depth 1 https://github.com/wbthomason/packer.nvim\
  ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 
 mkdir -p ~/.config && git clone https://github.com/xR3b0rn/nvim-setup.git ~/.config/nvim
+
+python3 -m pip install pynvim

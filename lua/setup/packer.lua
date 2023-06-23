@@ -44,5 +44,14 @@ return require('packer').startup(function(use)
   }
   use('neovim/nvim-lspconfig')
   use('jose-elias-alvarez/null-ls.nvim')
+  use('puremourning/vimspector')
+  use('ilyachur/cmake4vim')
+  use('jeetsukumaran/vim-buffergator')
+  use('simrat39/rust-tools.nvim')
+  use{ 'anuvyklack/pretty-fold.nvim',
+    config = function()
+      require('pretty-fold').setup()
+    end
+  }
 end)
 

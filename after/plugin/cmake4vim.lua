@@ -1,4 +1,3 @@
-
 vim.g.cmake_vimspector_support = 1
 vim.g.cmake_vimspector_default_configuration = {
   adapter = "vscode-cpptools",
@@ -10,4 +9,3 @@ vim.g.cmake_vimspector_default_configuration = {
     program = ""
   }
 }
-

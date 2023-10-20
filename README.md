@@ -1,2 +1,4 @@
 # nvim-setup
-nvim installation and configuration
+```
+wget -qO- https://raw.githubusercontent.com/xR3b0rn/nvim-setup/main/install.sh | bash
+```

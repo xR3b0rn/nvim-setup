@@ -1,4 +1,13 @@
 
+require('telescope').setup {
+  extensions = {
+    git_grep = {
+      additional_args = {
+        "--recurse-submodules"
+      }
+    }
+  }
+}
 require('telescope').load_extension('git_grep')
 local ts = require('telescope.builtin')
 local tsg = require('git_grep')

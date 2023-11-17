@@ -40,7 +40,7 @@ return require('packer').startup(function(use)
   use('jose-elias-alvarez/null-ls.nvim')
   use('puremourning/vimspector')
   use('ilyachur/cmake4vim')
-  use('jeetsukumaran/vim-buffergator')
+  --use('jeetsukumaran/vim-buffergator')
   use('simrat39/rust-tools.nvim')
   use { 'anuvyklack/pretty-fold.nvim',
     config = function()
@@ -49,8 +49,50 @@ return require('packer').startup(function(use)
   }
   use('nvim-tree/nvim-web-devicons')
   use('lewis6991/gitsigns.nvim')
-  use('romgrk/barbar.nvim')
   use({ 'davvid/telescope-git-grep.nvim', branch = 'main' })
-  use('prichrd/netrw.nvim')
   use('folke/tokyonight.nvim')
+  use('ray-x/lsp_signature.nvim')
+  use {
+    "nvim-neotest/neotest",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "antoinemadec/FixCursorHold.nvim"
+    }
+  }
+  use { "alfaix/neotest-gtest" }
+  use {
+    "lewis6991/hover.nvim",
+    config = function()
+      require("hover").setup {
+        init = function()
+          -- Require providers
+          require("hover.providers.lsp")
+          -- require('hover.providers.gh')
+          -- require('hover.providers.gh_user')
+          -- require('hover.providers.jira')
+          -- require('hover.providers.man')
+          -- require('hover.providers.dictionary')
+        end,
+        preview_opts = {
+          border = 'single'
+        },
+        -- Whether the contents of a currently open hover window should be moved
+        -- to a :h preview-window when pressing the hover keymap.
+        preview_window = false,
+        title = true,
+        mouse_providers = {
+          'LSP'
+        },
+        mouse_delay = 1000
+      }
+
+      -- Setup keymaps
+      vim.keymap.set("n", "K", require("hover").hover, { desc = "hover.nvim" })
+      vim.keymap.set("n", "gK", require("hover").hover_select, { desc = "hover.nvim (select)" })
+
+      -- Mouse support
+      vim.keymap.set('n', '<MouseMove>', require('hover').hover_mouse, { desc = "hover.nvim (mouse)" })
+      vim.o.mousemoveevent = true
+    end
+  }
 end)

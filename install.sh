@@ -19,33 +19,21 @@ sudo apt-get install -y \
 
 # Install python<version>-venv
 # Some language server do create a python3-venv  (e.g. the LSP for CMake)
-sudo apt-get install -y $(readlink $(which python3))-venv
+sudo apt-get install -y $(readlink $(which python3))-venv python3-neovim
 
-python3 -m pip install neovim
+git clone https://github.com/neovim/neovim
+cd neovim
+git checkout v0.10.1
+make CMAKE_BUILD_TYPE=RelWithDebInfo -j16
+sudo make install
+cd .. 
+rm -rf neovim
 
-sudo git clone https://github.com/neovim/neovim && cd neovim && \
-  make CMAKE_BUILD_TYPE=RelWithDebInfo && make install && \
-  cd .. && rm -r neovim
-
-sudo git clone --depth 1 https://github.com/wbthomason/packer.nvim \
+git clone --depth 1 https://github.com/wbthomason/packer.nvim \
  ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-
-git clone https://github.com/xR3b0rn/nvim-setup.git
-
-# First install required setup files for packer
-cd nvim-setup
-mkdir -p ~/.config/nvim/lua/setup
-cp init.lua ~/.config/nvim/.
-cp lua/setup/* ~/.config/nvim/lua/setup/.
-cd ..
 
 # Run PackerSync to install required packages
 nvim -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
-
-# Install configurations for previously installed packages
-cp -r nvim-setup/* ~/.config/nvim/.
-
-rm -r nvim-setup
 
 # Install oh-my-zsh
 apt-get install -y zsh

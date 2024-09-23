@@ -3,7 +3,6 @@ local lsp = require("lsp-zero")
 lsp.preset("recommended")
 
 lsp.ensure_installed({
-  'tsserver',
   'rust_analyzer',
 })
 
@@ -81,4 +80,7 @@ require("lspconfig").clangd.setup {
     "--offset-encoding=utf-16",
     "--clang-tidy",
   },
+  root_dir = function()
+    return vim.fn.getcwd()
+  end,
 }

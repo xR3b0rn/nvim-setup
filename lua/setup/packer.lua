@@ -12,6 +12,9 @@ return require('packer').startup(function(use)
       { 'nvim-lua/plenary.nvim' },
       { "nvim-telescope/telescope-live-grep-args.nvim" },
     },
+    config = function()
+      require("telescope").load_extension("live_grep_args")
+    end,
   }
   --use({ 'rose-pine/neovim', as = 'rose-pine' })
   --vim.cmd('colorscheme rose-pine')
@@ -32,7 +35,6 @@ return require('packer').startup(function(use)
         end,
       },
       { 'williamboman/mason-lspconfig.nvim' }, -- Optional
-
       -- Autocompletion
       { 'hrsh7th/nvim-cmp' },     -- Required
       { 'hrsh7th/cmp-nvim-lsp' }, -- Required
@@ -97,7 +99,6 @@ return require('packer').startup(function(use)
       vim.o.mousemoveevent = true
     end
   }
-
   use({
     "iamcco/markdown-preview.nvim",
     run = "cd app && npm install",
@@ -107,26 +108,12 @@ return require('packer').startup(function(use)
     end,
     ft = { "markdown" },
   })
-  use('puremourning/vimspector')
-
+  use { 'puremourning/vimspector' }
   use { 'NeogitOrg/neogit', requires = {
     { 'nvim-lua/plenary.nvim' }
   } }
-
   use { 'nvim-neotest/nvim-nio' }
-
   use { 'voldikss/vim-floaterm' }
-
-  use {
-    "nvim-telescope/telescope.nvim",
-    requires = {
-      { "nvim-telescope/telescope-live-grep-args.nvim" },
-    },
-    config = function()
-      require("telescope").load_extension("live_grep_args")
-    end
-  }
-
   use({
      "dpayne/CodeGPT.nvim",
      requires = {
@@ -137,4 +124,5 @@ return require('packer').startup(function(use)
         require("codegpt.config")
      end
   })
+  -- use 'mfussenegger/nvim-dap'
 end)

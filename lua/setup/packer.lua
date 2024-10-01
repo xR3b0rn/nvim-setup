@@ -36,9 +36,9 @@ return require('packer').startup(function(use)
       },
       { 'williamboman/mason-lspconfig.nvim' }, -- Optional
       -- Autocompletion
-      { 'hrsh7th/nvim-cmp' },     -- Required
-      { 'hrsh7th/cmp-nvim-lsp' }, -- Required
-      { 'L3MON4D3/LuaSnip' },     -- Required
+      { 'hrsh7th/nvim-cmp' },                  -- Required
+      { 'hrsh7th/cmp-nvim-lsp' },              -- Required
+      { 'L3MON4D3/LuaSnip' },                  -- Required
     }
   }
   use('neovim/nvim-lspconfig')
@@ -115,14 +115,30 @@ return require('packer').startup(function(use)
   use { 'nvim-neotest/nvim-nio' }
   use { 'voldikss/vim-floaterm' }
   use({
-     "dpayne/CodeGPT.nvim",
-     requires = {
-        "MunifTanjim/nui.nvim",
-        "nvim-lua/plenary.nvim",
-     },
-     config = function()
-        require("codegpt.config")
-     end
+    "dpayne/CodeGPT.nvim",
+    requires = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+    },
+    config = function()
+      require("codegpt.config")
+    end
+  })
+  use {
+    "kelly-lin/ranger.nvim",
+    config = function()
+      require("ranger-nvim").setup({ replace_netrw = true })
+      vim.api.nvim_set_keymap("n", "<leader>pv", "", {
+        noremap = true,
+        callback = function()
+          require("ranger-nvim").open(true)
+        end,
+      })
+    end,
+  }
+  use({
+    "aserowy/tmux.nvim",
+    config = function() return require("tmux").setup() end
   })
   -- use 'mfussenegger/nvim-dap'
 end)

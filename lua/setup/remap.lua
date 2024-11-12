@@ -1,12 +1,7 @@
 
 vim.g.mapleader = " "
--- vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
-vim.keymap.set("n", "<leader>pv", "", {
-  noremap = true,
-  callback = function()
-    require("ranger-nvim").open(true)
-  end,
-})
+vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>gg", vim.cmd.LazyGit)
 
 vim.cmd [[
   let g:netrw_fastbrowse = 2

@@ -11,8 +11,9 @@ return require('packer').startup(function(use)
   if packer_bootstrap then
     require('packer').sync()
   end
-  local lua_files = vim.fn.globpath("./plugins", "*.lua", false, true)
+  local lua_files = vim.fn.globpath(vim.fn.stdpath("config") .. "/lua/setup/plugins", "*.lua", false, true)
   for _, file in ipairs(lua_files) do
+    file = string.gsub(file, vim.fn.stdpath("config") .. "/lua/", "")
     local mod2, _ = string.gsub(file, "/", ".")
     local len = #mod2
     local mod = string.sub(mod2, 1, len - 4)

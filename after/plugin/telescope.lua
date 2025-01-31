@@ -29,17 +29,3 @@ require('telescope').setup {
     }
   }
 }
-local t = require('telescope')
-t.load_extension('git_grep')
-t.load_extension("live_grep_args")
-
-local ts = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', ts.find_files, {})
-vim.keymap.set('n', '<leader>fg', function() t.extensions.live_grep_args.live_grep_args { cwd = "%:p:h" } end, {})
-vim.keymap.set('n', '<leader>fo', function() ts.live_grep { grep_open_file=true } end, {})
-vim.keymap.set('n', '<leader>fb', ts.buffers, {})
-vim.keymap.set('n', '<leader>fh', ts.help_tags, {})
-vim.keymap.set('n', '<leader>fd', ts.diagnostics, {})
-vim.keymap.set('n', '<leader>ft', ts.treesitter, {})
-vim.keymap.set('n', '<leader>fr', ts.lsp_references, {})
-vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = true })

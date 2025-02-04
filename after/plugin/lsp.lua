@@ -35,38 +35,54 @@ lsp.set_preferences({
   }
 })
 
+vim.opt.digraph = false
+
 lsp.on_attach(function(client, bufnr)
   local wk = require("which-key")
-
-  wk.add({
-    {
-      mode = { "n" },
-      { "gD",          vim.lsp.buf.declaration,      desc = "goto declaration" },
-      { "gd",          vim.lsp.buf.definition,       desc = "goto definition" },
-      { "K",           vim.lsp.buf.hover,            desc = "hover" },
-      { "<leader>vws", vim.lsp.buf.workspace_symbol, desc = "workspace symbol" },
-      { "<leader>vd",  vim.diagnostic.open_float,    desc = "open float" },
-      { "[d",          vim.diagnostic.goto_next,     desc = "goto next diagnostics" },
-      { "]d",          vim.diagnostic.goto_prev,     desc = "goto prev diagnostics" },
-      { "<leader>vca", vim.lsp.buf.code_action,      desc = "apply code action" },
-      { "<leader>vrr", vim.lsp.buf.references,       desc = "list references" },
-      { "<leader>vrn", vim.lsp.buf.rename,           desc = "rename symbol" },
-    },
-    {
-      mode = { "n", "v" },
-      { "<C-F>", "<cmd>lua vim.lsp.buf.format({ async = true })<cr>", desc = "format code" },
-    },
-    {
-      mode = { "i" },
-      { "<C-h>",  vim.lsp.buf.signature_help,                                 desc = "signature help" },
-      { "<C-k>'", function() require('lsp_signature').toggle_float_win() end, desc = 'toggle signature' },
-    }
+  wk.register({
+    gD              = { vim.lsp.buf.declaration, "Goto declaration" },
+    gd              = { vim.lsp.buf.definition, "Goto definition" },
+    K               = { vim.lsp.buf.hover, "Hover" },
+    ["<leader>vws"] = { vim.lsp.buf.workspace_symbol, "Workspace symbol" },
+    ["<leader>vd"]  = { vim.diagnostic.open_float, "Open float" },
+    ["[d"]          = { vim.diagnostic.goto_next, "Next diagnostic" },
+    ["]d"]          = { vim.diagnostic.goto_prev, "Prev diagnostic" },
+    ["<leader>vca"] = { vim.lsp.buf.code_action, "Code action" },
+    ["<leader>vrr"] = { vim.lsp.buf.references, "List references" },
+    ["<leader>vrn"] = { vim.lsp.buf.rename, "Rename symbol" },
+  }, {
+    mode   = "n",
+    buffer = bufnr, -- Make sure the mapping is buffer-local to the LSP buffer
   })
+  wk.register({
+    ["<C-F>"] = { "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", "Format code" },
+  }, {
+    mode   = { "n", "v" },
+    buffer = bufnr,
+  })
+  wk.register({
+    ["<C-h>"] = { vim.lsp.buf.signature_help, "Signature help" },
+  }, {
+    mode   = "i",
+    buffer = bufnr,
+  })
+  wk.register({
+    ["<C-k>"] = {
+      function()
+        require("lsp_signature").toggle_float_win()
+      end,
+      "Toggle LSP signature window",
+    },
+  }, {
+    mode = "i",   -- Insert mode
+    buffer = bufnr, -- Make it buffer-local
+    noremap = true,
+    silent = true,
+  })
+
   require("lsp_signature").on_attach({
     bind = true,
-    handler_opts = {
-      border = "rounded"
-    }
+    handler_opts = { border = "rounded" },
   }, bufnr)
 end)
 

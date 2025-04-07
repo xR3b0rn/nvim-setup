@@ -21,7 +21,7 @@ wk.add({
     mode = { "n" },
     { "<leader>pv", vim.cmd.Ex,        desc = "file exporer" },
     { "<leader>gg", vim.cmd.LazyGit,   desc = "LazyGit" },
-    { "<leader>nv", vim.cmd.Navbuddy,  desc = "Navbuddy" },
+    { "<leader>nb", vim.cmd.Navbuddy,  desc = "Navbuddy" },
     { "<leader>ff", ts.find_files,     desc = "find files" },
     { "<leader>fg", live_grep_args,    desc = "live grep args" },
     { "<leader>fo", live_grep,         desc = "live grep" },
@@ -33,6 +33,8 @@ wk.add({
     { "<leader>e",  diagnostics_str,   desc = "float diagnostics" },
   }
 })
+
+local lsp = require("lsp-zero")
 
 vim.cmd [[
   let g:netrw_fastbrowse = 2

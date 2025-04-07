@@ -20,6 +20,7 @@ dap.configurations.cpp = {
     end,
     cwd = '${workspaceFolder}',
     args = {},
+    preLaunchTask = "make"
   },
 }
 

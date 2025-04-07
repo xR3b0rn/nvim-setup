@@ -20,17 +20,17 @@ wk.add({
   {
     mode = { "n" },
     { "<leader>pv", vim.cmd.Ex,        desc = "file exporer" },
-    { "<lader>gg",  vim.cmd.LazyGit,   desc = "LazyGit" },
+    { "<leader>gg", vim.cmd.LazyGit,   desc = "LazyGit" },
     { "<leader>nv", vim.cmd.Navbuddy,  desc = "Navbuddy" },
-    { '<leader>ff', ts.find_files,     desc = "find files" },
-    { '<leader>fg', live_grep_args,    desc = "live grep args" },
-    { '<leader>fo', live_grep,         desc = "live grep" },
-    { '<leader>fb', ts.buffers,        desc = "buffers" },
-    { '<leader>fh', ts.help_tags,      desc = "help tags" },
-    { '<leader>fd', ts.diagnostics,    desc = "diagnostics" },
-    { '<leader>ft', ts.treesitter,     desc = "treesitter" },
-    { '<leader>fr', ts.lsp_references, desc = "references" },
-    { '<space>e',   diagnostics_str,   desc = "float diagnostics" },
+    { "<leader>ff", ts.find_files,     desc = "find files" },
+    { "<leader>fg", live_grep_args,    desc = "live grep args" },
+    { "<leader>fo", live_grep,         desc = "live grep" },
+    { "<leader>fb", ts.buffers,        desc = "buffers" },
+    { "<leader>fh", ts.help_tags,      desc = "help tags" },
+    { "<leader>fd", ts.diagnostics,    desc = "diagnostics" },
+    { "<leader>ft", ts.treesitter,     desc = "treesitter" },
+    { "<leader>fr", ts.lsp_references, desc = "references" },
+    { "<leader>e",  diagnostics_str,   desc = "float diagnostics" },
   }
 })
 

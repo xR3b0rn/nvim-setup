@@ -1,1 +1,1 @@
-return 'stevearc/overseer.nvim'
+return { 'stevearc/overseer.nvim' }

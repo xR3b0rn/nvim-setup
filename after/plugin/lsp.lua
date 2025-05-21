@@ -1,15 +1,21 @@
 local lsp = require("lsp-zero")
 local lspconfig = require("lspconfig")
+local mason = require("mason")
+local mason_lspconfig = require("mason-lspconfig")
+local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
--- lsp.preset("recommended")
+vim.opt.digraph = false
+
 lsp.extend_lspconfig()
-
--- lsp.ensure_installed({
---   'rust_analyzer',
--- })
-
--- Fix Undefined global 'vim'
--- lsp.nvim_workspace()
+lspconfig.lua_ls.setup({
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { "vim" }
+      }
+    }
+  }
+})
 
 local cmp = require('cmp')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
@@ -20,33 +26,20 @@ cmp.setup({
     ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
     ['<C-y>'] = cmp.mapping.confirm({ select = true }),
     ['<C-Space>'] = cmp.mapping.complete(),
-  }
-})
-
-require("mason").setup({})
-require("mason-lspconfig").setup({
-  ensure_installed = {
-    "rust_analyzer",
-    "clangd",
   },
-  handlers = {
-    lsp.default_setup,
-  }
+  completion = {
+    autocomplete = { require('cmp.types').cmp.TriggerEvent.TextChanged },
+  },
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' },
+  },
 })
 
--- lsp.set_preferences({
---   suggest_lsp_servers = false,
---   sign_icons = {
---     error = 'E',
---     warn = 'W',
---     hint = 'H',
---     info = 'I'
---   }
--- })
-
-vim.opt.digraph = false
+mason.setup({})
 
 lsp.on_attach(function(client, bufnr)
+  print("lsp.on_attach")
   local wk = require("which-key")
   wk.add({
     {
@@ -100,41 +93,8 @@ vim.diagnostic.config({
   virtual_text = true
 })
 
-local cmp_nvim_lsp = require "cmp_nvim_lsp"
-
--- lspconfig.clangd.setup {
---   on_attach = on_attach,
---   capabilities = cmp_nvim_lsp.default_capabilities(),
---   cmd = {
---     "clangd",
---     "--offset-encoding=utf-16",
---     "--clang-tidy",
---   },
---   root_dir = function()
---     return vim.fn.getcwd()
---   end,
--- }
--- lspconfig.rust_analyzer.setup({
---   settings = {
---     ["rust-analyzer"] = {
---       imports = {
---         granularity = {
---           group = "module",
---         },
---         prefix = "self",
---       },
---       cargo = {
---         buildScripts = {
---           enable = true,
---         },
---       },
---       procMacro = {
---         enable = true
---       },
---     }
---   }
--- })
 lsp.configure("clangd", {
+  capabilities = cmp_nvim_lsp.default_capabilities(),
   cmd = {
     "clangd",
     "--offset-encoding=utf-16",
@@ -163,7 +123,11 @@ lsp.configure("rust_analyzer", {
       },
     },
   },
+  on_new_config = function(new_config, new_cwd)
+    print("test")
+    local status, cmake = pcall(require, "cmake-tools")
+    if status then
+      cmake.clangd_on_new_config(new_config)
+    end
+  end,
 })
-
-
--- lsp.setup()

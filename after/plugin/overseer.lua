@@ -1,7 +1,17 @@
 local overseer = require("overseer")
 local dap = require("dap")
 
-overseer.setup()
+overseer.setup({
+  task_list = {
+    direction = "bottom",
+    bindings = {
+      ["q"] = function()
+        print("test")
+        vim.cmd("close")
+      end,
+    },
+  },
+})
 
 vim.api.nvim_create_user_command("Make", function(params)
   -- Insert args at the '$*' in the makeprg
@@ -28,7 +38,7 @@ overseer.register_template({
   builder = function()
     return {
       cmd = "make", -- or your custom build command
-      cwd = vim.fn.getcwd(),
+      cwd = vim.fn.getcwd() .. "/build",
     }
   end,
 })

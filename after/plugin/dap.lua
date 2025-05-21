@@ -38,14 +38,14 @@ vim.keymap.set("n", "<F12>", function() dap.step_out() end)
 wk.add({
   {
     mode = { "n" },
-    { "<Leader>dT", function() dap.terminate() end, desc = "terminate debug program" },
-    { "<Leader>dp", function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end, desc = "set loggin breakpoint" },
-    { "<Leader>dr", function() dap.repl.open() end,                                                   desc = "dap open repl" },
-    { "<Leader>dl", function() dap.run_last() end,                                                    desc = "run last" },
-    { "<Leader>dh", function() require('dap.ui.widgets').hover() end,                                 desc = "dap hover" },
-    { "<Leader>dp", function() require('dap.ui.widgets').preview() end,                               desc = "dap preview" },
+    { "<leader>dT", function() dap.terminate() end, desc = "terminate debug program" },
+    { "<leader>dp", function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end, desc = "set loggin breakpoint" },
+    { "<leader>dr", function() dap.repl.open() end,                                                   desc = "dap open repl" },
+    { "<leader>dl", function() dap.run_last() end,                                                    desc = "run last" },
+    { "<leader>dh", function() require('dap.ui.widgets').hover() end,                                 desc = "dap hover" },
+    { "<leader>dp", function() require('dap.ui.widgets').preview() end,                               desc = "dap preview" },
     {
-      "<Leader>df",
+      "<leader>df",
       function()
         local widgets = require('dap.ui.widgets')
         widgets.centered_float(widgets.frames)

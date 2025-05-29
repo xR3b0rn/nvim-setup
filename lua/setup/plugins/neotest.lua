@@ -11,9 +11,10 @@ return {
   config = function()
     require("neotest").setup({
       adapters = {
-        -- require("neotest-catch2")({ }),
-        require("neotest-gtest").setup({}),
-      }
+        require("neotest-gtest").setup({
+          debug_adapter = "cppdbg", -- oder "rt_lldb"
+        }),
+      },
     })
   end
 }

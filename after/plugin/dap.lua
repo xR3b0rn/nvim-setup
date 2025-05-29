@@ -1,5 +1,8 @@
 local dap = require("dap")
 local wk = require("which-key")
+local cmake = require("cmake-tools")
+
+local cached_program = nil
 
 dap.adapters.cppdbg = {
   id = "cppdbg",
@@ -16,11 +19,32 @@ dap.configurations.cpp = {
     request = "launch",
     pid = require("dap.utils").launch,
     program = function()
-      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      if not cached_program then
+        cached_program = vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      end
+      return cached_program
     end,
     cwd = '${workspaceFolder}',
     args = {},
-    preLaunchTask = "make"
+  },
+}
+
+dap.configurations.c = {
+  {
+    -- If you get an "Operation not permitted" error using this, try disabling YAMA:
+    --  echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+    name = "Launch",
+    type = "cppdbg", -- Adjust this to match your adapter name (`dap.adapters.<name>`)
+    request = "launch",
+    pid = require("dap.utils").launch,
+    program = function()
+      if not cached_program then
+        cached_program = vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      end
+      return cached_program
+    end,
+    cwd = '${workspaceFolder}',
+    args = {},
   },
 }
 
@@ -38,7 +62,7 @@ vim.keymap.set("n", "<F12>", function() dap.step_out() end)
 wk.add({
   {
     mode = { "n" },
-    { "<leader>dT", function() dap.terminate() end, desc = "terminate debug program" },
+    { "<leader>dT", function() dap.terminate() end,                                                   desc = "terminate debug program" },
     { "<leader>dp", function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end, desc = "set loggin breakpoint" },
     { "<leader>dr", function() dap.repl.open() end,                                                   desc = "dap open repl" },
     { "<leader>dl", function() dap.run_last() end,                                                    desc = "run last" },

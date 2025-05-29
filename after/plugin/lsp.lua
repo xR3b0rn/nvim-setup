@@ -1,8 +1,8 @@
 local lsp = require("lsp-zero")
 local lspconfig = require("lspconfig")
 local mason = require("mason")
-local mason_lspconfig = require("mason-lspconfig")
 local cmp_nvim_lsp = require("cmp_nvim_lsp")
+local wk = require("which-key")
 
 vim.opt.digraph = false
 
@@ -39,8 +39,6 @@ cmp.setup({
 mason.setup({})
 
 lsp.on_attach(function(client, bufnr)
-  print("lsp.on_attach")
-  local wk = require("which-key")
   wk.add({
     {
       mode = "n",

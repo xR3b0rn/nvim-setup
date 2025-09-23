@@ -1,6 +1,6 @@
 return {
   "SmiteshP/nvim-navbuddy",
-  requires = {
+  dependencies = {
     "neovim/nvim-lspconfig",
     "SmiteshP/nvim-navic",
     "MunifTanjim/nui.nvim",

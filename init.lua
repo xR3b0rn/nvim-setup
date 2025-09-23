@@ -1,5 +1,2 @@
-
+require("config.lazy")
 require("setup")
-
-vim.o.mouse = 'a'
-

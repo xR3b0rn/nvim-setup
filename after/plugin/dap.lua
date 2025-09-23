@@ -20,13 +20,44 @@ dap.configurations.cpp = {
     pid = require("dap.utils").launch,
     program = function()
       if not cached_program then
-        cached_program = vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        cached_program = vim.fn.getcwd() .. '/'
       end
+      cached_program = vim.fn.input('Path to executable: ', cached_program, 'file')
       return cached_program
     end,
     cwd = '${workspaceFolder}',
     args = {},
   },
+  {
+    name = "Attach to gdbserver",
+    type = "cppdbg",
+    request = "launch",
+    MIMode = "gdb",
+    miDebuggerServerAddress = function()
+      if not cached_ip then
+        cached_ip = ":1234"
+      end
+      cached_ip = vim.fn.input('IP address of remote system: ', cached_ip, 'file')
+      return cached_ip
+    end,
+    miDebuggerPath = "/usr/bin/gdb-multiarch",
+    cwd = '${workspaceFolder}',
+    program = function()
+      if not cached_program then
+        cached_program = vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      end
+      return cached_program
+    end,
+    stopAtEntry = true,
+    externalConsole = false,
+    setupCommands = {
+      {
+        text = "-enable-pretty-printing",
+        description = "enable pretty printing",
+        ignoreFailures = false
+      }
+    },
+  }
 }
 
 dap.configurations.c = {

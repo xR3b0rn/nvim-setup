@@ -10,6 +10,7 @@ vim.opt.digraph = false
 
 vim.lsp.enable("clangd")
 vim.lsp.enable("lua_ls")
+vim.lsp.enable("pyright")
 vim.lsp.enable("cmake-language-server")
 
 cmp.setup({
@@ -57,8 +58,6 @@ local on_attach = function(client, bufnr)
         "<C-f>",
         function()
           vim.lsp.buf.format({ async = true })
-          print("lsp format 1")
-          print("lsp format 2")
         end,
         desc = "Format code"
       },
@@ -91,10 +90,10 @@ local on_attach = function(client, bufnr)
       buffer = bufnr,
       group = group,
       callback = function()
-        local succ = lsp_format_modifications.format_modifications(client, bufnr, { vcs = "localc" })
-        if not success then
-          vim.lsp.buf.format { bufnr = bufnr }
-        end
+        -- local succ = lsp_format_modifications.format_modifications(client, bufnr, { vcs = "localc" })
+        -- if not success then
+        --   vim.lsp.buf.format { bufnr = bufnr }
+        -- end
       end,
       desc = "[lsp] format on save",
     })
@@ -108,3 +107,8 @@ vim.lsp.config("clangd", {
 vim.lsp.config("lua_ls", {
   on_attach = on_attach
 })
+
+vim.lsp.config("rust_analyzer", {
+  on_attach = on_attach
+})
+

@@ -17,8 +17,6 @@ return {
 
     dap.configurations.cpp = {
       {
-        -- If you get an "Operation not permitted" error using this, try disabling YAMA:
-        --  echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
         name = "Launch",
         type = "cppdbg", -- Adjust this to match your adapter name (`dap.adapters.<name>`)
         request = "launch",

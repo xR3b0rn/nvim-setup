@@ -8,10 +8,9 @@ return {
     "nvim-telescope/telescope.nvim",
 
   },
-  keys =
-  {
+  keys = {
     mode = { "n" },
-    { "<leader>nb", vim.cmd.Navbuddy, desc = "Navbuddy" },
+    { "<leader>b", vim.cmd.Navbuddy, desc = "Navbuddy" },
   },
   config = function()
     local navbuddy = require("nvim-navbuddy")

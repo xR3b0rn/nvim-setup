@@ -49,7 +49,6 @@ function ColorMyPencils(color)
 	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none"})
 end
 
-vim.g.mapleader = " "
 local wk = require("which-key")
 wk.add({
   {

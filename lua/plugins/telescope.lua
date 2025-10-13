@@ -5,20 +5,20 @@ return {
     "nvim-telescope/telescope-live-grep-args.nvim",
   },
   keys = {
-    mode = { "n" },
     {
       "<leader>fg",
       function()
         require('telescope').extensions.live_grep_args.live_grep_args { cwd = "%:p:h" }
       end,
+      mode = { "n" },
       desc = "live grep args"
     },
     {
       "<leader>fo",
       function()
         require('telescope.builtin').live_grep { grep_open_file = true }
-      end
-      ,
+      end,
+      mode = { "n" },
       desc = "live grep"
     },
   },

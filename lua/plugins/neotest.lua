@@ -23,7 +23,7 @@ return {
         "build",
         ".git"
       ),
-      debug_adapter = "codelldb",
+      debug_adapter = "cppdbg",
       history_size = 3,
       parsing_throttle_ms = 10,
       mappings = { configure = nil },

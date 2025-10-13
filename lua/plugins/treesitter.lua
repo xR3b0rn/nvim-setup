@@ -1,6 +1,14 @@
 return {
   'nvim-treesitter/nvim-treesitter',
   build = ":TSUpdate",
+  keys = {
+    { "<leader>ff", require('telescope.builtin').find_files,     desc = "find files" },
+    { "<leader>fb", require('telescope.builtin').buffers,        desc = "buffers" },
+    { "<leader>fh", require('telescope.builtin').help_tags,      desc = "help tags" },
+    { "<leader>fd", require('telescope.builtin').diagnostics,    desc = "diagnostics" },
+    { "<leader>ft", require('telescope.builtin').treesitter,     desc = "treesitter" },
+    { "<leader>fr", require('telescope.builtin').lsp_references, desc = "references" },
+  },
   config = function()
     require("nvim-treesitter.configs").setup {
       indent = { enable = true },

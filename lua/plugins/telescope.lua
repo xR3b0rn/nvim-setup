@@ -4,10 +4,31 @@ return {
     "nvim-lua/plenary.nvim",
     "nvim-telescope/telescope-live-grep-args.nvim",
   },
+  keys = {
+    mode = { "n" },
+    {
+      "<leader>fg",
+      function()
+        require('telescope').extensions.live_grep_args.live_grep_args { cwd = "%:p:h" }
+      end,
+      desc = "live grep args"
+    },
+    {
+      "<leader>fo",
+      function()
+        require('telescope.builtin').live_grep { grep_open_file = true }
+      end
+      ,
+      desc = "live grep"
+    },
+  },
   config = function()
-    require("telescope").load_extension("live_grep_args")
+    local t = require('telescope')
+    t.load_extension('git_grep')
+    t.load_extension("live_grep_args")
+    t.load_extension("live_grep_args")
     local lga_actions = require("telescope-live-grep-args.actions")
-    require("telescope").setup {
+    t.setup {
       extensions = {
         git_grep = {
           additional_args = {

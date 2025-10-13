@@ -6,6 +6,12 @@ return {
     "MunifTanjim/nui.nvim",
     "numToStr/Comment.nvim",
     "nvim-telescope/telescope.nvim",
+
+  },
+  keys =
+  {
+    mode = { "n" },
+    { "<leader>nb", vim.cmd.Navbuddy, desc = "Navbuddy" },
   },
   config = function()
     local navbuddy = require("nvim-navbuddy")
@@ -22,7 +28,7 @@ return {
         sections = {
           left = {
             size = "20%",
-            border = nil,     -- You can set border style for each section individually as well.
+            border = nil, -- You can set border style for each section individually as well.
           },
           mid = {
             size = "40%",
@@ -32,7 +38,7 @@ return {
             -- No size option for right most section. It fills to
             -- remaining area.
             border = nil,
-            preview = "leaf",     -- Right section can show previews too.
+            preview = "leaf", -- Right section can show previews too.
             -- Options: "leaf", "always" or "never"
           }
         },
@@ -137,10 +143,10 @@ return {
         preference = nil,   -- list of lsp server names in order of preference
       },
       source_buffer = {
-        follow_node = true, -- Keep the current node in focus on the source buffer
-        highlight = true,   -- Highlight the currently focused node
-        reorient = "smart", -- "smart", "top", "mid" or "none"
-        scrolloff = nil     -- scrolloff value when navbuddy is open
+        follow_node = true,  -- Keep the current node in focus on the source buffer
+        highlight = true,    -- Highlight the currently focused node
+        reorient = "smart",  -- "smart", "top", "mid" or "none"
+        scrolloff = nil      -- scrolloff value when navbuddy is open
       },
       custom_hl_group = nil, -- "Visual" or any other hl group to use instead of inverted colors
     }

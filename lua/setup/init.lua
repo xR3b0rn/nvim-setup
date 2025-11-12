@@ -15,6 +15,7 @@ vim.opt.wrap = false
 
 vim.opt.swapfile = false
 vim.opt.backup = false
+vim.opt.writebackup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
 
@@ -27,7 +28,7 @@ vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 
-vim.opt.updatetime = 50
+vim.opt.updatetime = 300
 
 vim.opt.colorcolumn = "100"
 
@@ -40,21 +41,32 @@ vim.opt.list = true
 vim.opt.cursorline = true
 
 function ColorMyPencils(color)
-	color = color or "rose-pine"
-	vim.cmd.colorscheme(color)
+  color = color or "rose-pine"
+  vim.cmd.colorscheme(color)
   hl = vim.api.nvim_get_hl(0, { name = "Normal" })
   hl.blend = 100
   hl.bg = "none"
-	vim.api.nvim_set_hl(0, "Normal", hl)
-	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none"})
+  vim.api.nvim_set_hl(0, "Normal", hl)
+  vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
 
 local wk = require("which-key")
 wk.add({
   {
     mode = { "n" },
-    { "<leader>pv", vim.cmd.Ex,        desc = "file exporer" },
-    { "<leader>gg", vim.cmd.LazyGit,   desc = "LazyGit" },
-    { "<leader>e",  '<cmd>lua vim.diagnostic.open_float()<CR>',   desc = "float diagnostics" },
+    { "<leader>pv", vim.cmd.Ex,                                 desc = "file exporer" },
+    { "<leader>gg", vim.cmd.LazyGit,                            desc = "LazyGit" },
+    { "<leader>e",  '<cmd>lua vim.diagnostic.open_float()<CR>', desc = "float diagnostics" },
   }
 })
+
+local keyset = vim.keymap.set
+function _G.check_back_space()
+  local col = vim.fn.col('.') - 1
+  return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
+end
+
+vim.keymap.set("i", "<C-n>", "coc#pum#next(0)", { expr = true, silent = true })
+vim.keymap.set("i", "<C-p>", "coc#pum#prev(0)", { expr = true, silent = true })
+vim.keymap.set("i", "<C-y>", "coc#pum#confirm()", { expr = true, silent = true })
+vim.keymap.set("i", "<C-Space>", "coc#refresh()", { expr = true, silent = true })

@@ -1,17 +1,12 @@
 return {
   "SmiteshP/nvim-navbuddy",
   dependencies = {
-    "neovim/nvim-lspconfig",
     "SmiteshP/nvim-navic",
     "MunifTanjim/nui.nvim",
     "numToStr/Comment.nvim",
     "nvim-telescope/telescope.nvim",
-
   },
-  keys = {
-    mode = { "n" },
-    { "<leader>b", vim.cmd.Navbuddy, desc = "Navbuddy" },
-  },
+  keys = { { "<leader>b", vim.cmd.Navbuddy, mode = "n", desc = "Navbuddy" }, },
   config = function()
     local navbuddy = require("nvim-navbuddy")
     local actions = require("nvim-navbuddy.actions")

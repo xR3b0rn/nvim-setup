@@ -14,8 +14,8 @@ return {
     set({ "n", "x" }, "<M-j>", function() mc.lineSkipCursor(1) end)
 
     -- Add or skip adding a new cursor by matching word/selection
-    set({ "n", "x" }, "<C-n>", function() mc.matchAddCursor(1) end)
-    set({ "n", "x" }, "<C-p>", function() mc.matchAddCursor(-1) end)
+    --set({ "n", "x" }, "<C-n>", function() mc.matchAddCursor(1) end)
+    --set({ "n", "x" }, "<C-p>", function() mc.matchAddCursor(-1) end)
 
     -- Disable and enable cursors.
     set({ "n", "x" }, "<C-q>", mc.toggleCursor)

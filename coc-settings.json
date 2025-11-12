@@ -1,4 +1,12 @@
 {
   "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/21.1.0/clangd_21.1.0/bin/clangd",
   "inlayHint.enable": false,
+  "diagnostic.enable": true,
+  "diagnostic.enableMessage": "always",
+  "diagnostic.virtualText": true,
+  "suggest.labelMaxLength": 200,
+  "diagnostic.level": "information",
+  "suggest.detailField": "abbr",
+  "explorer.width": 30,
+  "explorer.previewAction.onHover": false,
 }

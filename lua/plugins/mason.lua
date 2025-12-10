@@ -38,8 +38,7 @@ return {
       end,
       desc = "Format file",
       mode = "n"
-    },
-    { "<C-Space>", "<Cmd>lua vim.lsp.buf.completion()<CR>", desc = "Trigger completion", mode = "i" },
+    }
   },
   opts = {
     ui = {

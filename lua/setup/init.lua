@@ -70,3 +70,11 @@ vim.keymap.set("i", "<C-n>", "coc#pum#next(0)", { expr = true, silent = true })
 vim.keymap.set("i", "<C-p>", "coc#pum#prev(0)", { expr = true, silent = true })
 vim.keymap.set("i", "<C-y>", "coc#pum#confirm()", { expr = true, silent = true })
 vim.keymap.set("i", "<C-Space>", "coc#refresh()", { expr = true, silent = true })
+
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+})

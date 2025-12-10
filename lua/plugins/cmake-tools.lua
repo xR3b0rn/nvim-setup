@@ -3,11 +3,17 @@ return {
   dependencies = {
     "stevearc/overseer.nvim"
   },
+  keys = {
+    { "<F5>", vim.cmd.CMakeDebug, mode = "n", desc = "Debug CMake target" },
+  },
   config = function()
     local cmake = require("cmake-tools")
     local overseer = require("overseer")
-
     cmake.setup {
+      cmake_dap_configuration = {
+        name = "cpp",
+        type = "cppdbg",
+      },
       cmake_executor = {
         name = "quickfix",
         default_opts = {
@@ -31,6 +37,7 @@ return {
       vim.api.nvim_create_autocmd("BufWritePost", {
         pattern = { "*.cpp", "*.cc", "*.cxx", "*.c", "*.h", "*.hpp" },
         callback = function()
+          cmake.stop_executor()
           cmake.build({ target = "all" }, function(succ)
             if succ == true then
               overseer.toggle()

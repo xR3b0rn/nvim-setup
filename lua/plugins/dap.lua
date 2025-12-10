@@ -77,23 +77,6 @@ return {
     vim.fn.sign_define('DapBreakpointRejected', { text = '⚪', texthl = '', linehl = '', numhl = '' })
     vim.fn.sign_define('DapLogPoint', { text = '🔵', texthl = '', linehl = '', numhl = '' })
 
-    -- vim.keymap.set("n", "<F5>", function()
-    --   if dap.session() then
-    --     dap.continue();
-    --   else
-    --     if not cached_program then
-    --       cached_program = vim.fn.getcwd() .. '/'
-    --     end
-    --     snacks.input({
-    --       prompt = "Path to executable",
-    --       default = cached_program,
-    --       completion = "file",
-    --     }, function(value)
-    --       cached_program = value
-    --       dap.continue();
-    --     end)
-    --   end
-    -- end)
     vim.keymap.set("n", "<F9>", function() dap.toggle_breakpoint() end)
     vim.keymap.set("n", "<F10>", function() dap.step_over() end)
     vim.keymap.set("n", "<F11>", function() dap.step_into() end)

@@ -4,7 +4,15 @@ return {
     "stevearc/overseer.nvim"
   },
   keys = {
-    { "<F5>", vim.cmd.CMakeDebug, mode = "n", desc = "Debug CMake target" },
+    {
+      "<F5>",
+      function()
+        vim.cmd.CMakeStopExecutor()
+        vim.cmd.CMakeDebugCurrentFile()
+      end,
+      mode = "n",
+      desc = "Debug CMake target"
+    },
   },
   config = function()
     local cmake = require("cmake-tools")

@@ -17,10 +17,14 @@ return {
   config = function()
     local cmake = require("cmake-tools")
     local overseer = require("overseer")
+    local dap_args = require("dap_args")
     cmake.setup {
       cmake_dap_configuration = {
         name = "cpp",
         type = "cppdbg",
+        args = function()
+          return dap_args.get()
+        end,
       },
       cmake_executor = {
         name = "quickfix",

@@ -22,18 +22,17 @@ return {
         local bufnr = vim.api.nvim_get_current_buf()
         local clients = vim.lsp.get_clients({ bufnr = bufnr })
         local has_formatter = false
-
+        local conform = require("conform")
         for _, client in ipairs(clients) do
           if client.server_capabilities.documentFormattingProvider then
             has_formatter = true
             break
           end
         end
-
         if has_formatter then
           vim.lsp.buf.format({ async = true })
         else
-          require("conform").format({ async = true })
+          conform.format({ async = true })
         end
       end,
       desc = "Format file",

@@ -66,11 +66,6 @@ function _G.check_back_space()
   return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
 end
 
-vim.keymap.set("i", "<C-n>", "coc#pum#next(0)", { expr = true, silent = true })
-vim.keymap.set("i", "<C-p>", "coc#pum#prev(0)", { expr = true, silent = true })
-vim.keymap.set("i", "<C-y>", "coc#pum#confirm()", { expr = true, silent = true })
-vim.keymap.set("i", "<C-Space>", "coc#refresh()", { expr = true, silent = true })
-
 vim.diagnostic.config({
   virtual_text = true,
   signs = true,
@@ -78,3 +73,5 @@ vim.diagnostic.config({
   update_in_insert = false,
   severity_sort = true,
 })
+
+require("dap_args").setup_commands()

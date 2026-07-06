@@ -6,8 +6,12 @@ return {
   config = function()
     local dap = require("dap")
     local wk = require("which-key")
-    local cached_program = nil
     local snacks = require("snacks")
+    local dap_args = require("dap_args")
+
+    local cached_program = nil
+    local cached_ip = nil
+    local cached_args = {}
 
     dap.adapters.cppdbg = {
       id = "cppdbg",
@@ -18,14 +22,16 @@ return {
     dap.configurations.cpp = {
       {
         name = "Launch",
-        type = "cppdbg", -- Adjust this to match your adapter name (`dap.adapters.<name>`)
+        type = "cppdbg",
         request = "launch",
         pid = require("dap.utils").launch,
         program = function()
           return cached_program
         end,
-        cwd = '${workspaceFolder}',
-        args = {},
+        cwd = vim.loop.cwd(),
+        args = function()
+          return dap_args.get()
+        end,
       },
       {
         name = "Attach to gdbserver",
@@ -40,8 +46,14 @@ return {
           return cached_ip
         end,
         miDebuggerPath = "/usr/bin/gdb-multiarch",
-        cwd = '${workspaceFolder}',
+        cwd = vim.loop.cwd(),
+        args = function()
+          return dap_args.get()
+        end,
         program = function()
+          if not cached_program then
+            cached_program = vim.fn.input('Path to the program: ', vim.fn.getcwd(), 'file')
+          end
           return cached_program
         end,
         stopAtEntry = true,
@@ -68,7 +80,9 @@ return {
           return cached_program
         end,
         cwd = '${workspaceFolder}',
-        args = {},
+        args = function()
+          return dap_args.get()
+        end,
       },
     }
 
@@ -77,6 +91,7 @@ return {
     vim.fn.sign_define('DapBreakpointRejected', { text = '⚪', texthl = '', linehl = '', numhl = '' })
     vim.fn.sign_define('DapLogPoint', { text = '🔵', texthl = '', linehl = '', numhl = '' })
 
+    vim.keymap.set("n", "<F4>", function() dap.continue() end)
     vim.keymap.set("n", "<F9>", function() dap.toggle_breakpoint() end)
     vim.keymap.set("n", "<F10>", function() dap.step_over() end)
     vim.keymap.set("n", "<F11>", function() dap.step_into() end)

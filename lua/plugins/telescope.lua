@@ -8,10 +8,15 @@ return {
     {
       "<leader>fg",
       function()
-        require('telescope').extensions.live_grep_args.live_grep_args { cwd = "%:p:h" }
+        local ok, oil = pcall(require, "oil")
+        local cwd = ok and oil.get_current_dir() or nil
+        if not cwd then
+          cwd = vim.fn.expand("%:p:h")
+        end
+        require('telescope').extensions.live_grep_args.live_grep_args { cwd = cwd }
       end,
       mode = { "n" },
-      desc = "live grep args"
+      desc = "Live grep args (inkl. Oil Integration)"
     },
     {
       "<leader>fo",
@@ -19,13 +24,12 @@ return {
         require('telescope.builtin').live_grep { grep_open_file = true }
       end,
       mode = { "n" },
-      desc = "live grep"
+      desc = "Live grep (nur offene Dateien)"
     },
   },
   config = function()
     local t = require('telescope')
     t.load_extension('git_grep')
-    t.load_extension("live_grep_args")
     t.load_extension("live_grep_args")
     local lga_actions = require("telescope-live-grep-args.actions")
     t.setup {
@@ -43,6 +47,7 @@ return {
             },
           },
         }
-      } }
+      }
+    }
   end,
-};
+}

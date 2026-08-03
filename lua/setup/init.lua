@@ -54,7 +54,7 @@ local wk = require("which-key")
 wk.add({
   {
     mode = { "n" },
-    { "<leader>pv", vim.cmd.Ex,                                 desc = "file exporer" },
+    { "<leader>pv", "<CMD>Oil<CR>",                                 desc = "file exporer" },
     { "<leader>gg", vim.cmd.LazyGit,                            desc = "LazyGit" },
     { "<leader>e",  '<cmd>lua vim.diagnostic.open_float()<CR>', desc = "float diagnostics" },
   }
@@ -75,3 +75,18 @@ vim.diagnostic.config({
 })
 
 require("dap_args").setup_commands()
+
+local conceal_group = vim.api.nvim_create_augroup("ConcealMath", { clear = true })
+
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+  group = conceal_group,
+  pattern = "*",
+  callback = function()
+    vim.wo.conceallevel = 2
+    vim.cmd([[
+      syntax match Operator ">=" conceal cchar=≥
+      syntax match Operator "<=" conceal cchar=≤
+      syntax match Operator "!=" conceal cchar=≠
+    ]])
+  end,
+})

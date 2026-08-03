@@ -6,97 +6,26 @@ return {
   config = function()
     local dap = require("dap")
     local wk = require("which-key")
-    local snacks = require("snacks")
-    local dap_args = require("dap_args")
-
-    local cached_program = nil
-    local cached_ip = nil
-    local cached_args = {}
-
+    local vscode = require('dap.ext.vscode')
     dap.adapters.cppdbg = {
       id = "cppdbg",
       type = "executable",
       command = "/opt/debugAdapters/bin/OpenDebugAD7",
     }
-
-    dap.configurations.cpp = {
-      {
-        name = "Launch",
-        type = "cppdbg",
-        request = "launch",
-        pid = require("dap.utils").launch,
-        program = function()
-          return cached_program
-        end,
-        cwd = vim.loop.cwd(),
-        args = function()
-          return dap_args.get()
-        end,
-      },
-      {
-        name = "Attach to gdbserver",
-        type = "cppdbg",
-        request = "launch",
-        MIMode = "gdb",
-        miDebuggerServerAddress = function()
-          if not cached_ip then
-            cached_ip = ":1234"
-          end
-          cached_ip = vim.fn.input('IP address of remote system: ', cached_ip, 'file')
-          return cached_ip
-        end,
-        miDebuggerPath = "/usr/bin/gdb-multiarch",
-        cwd = vim.loop.cwd(),
-        args = function()
-          return dap_args.get()
-        end,
-        program = function()
-          if not cached_program then
-            cached_program = vim.fn.input('Path to the program: ', vim.fn.getcwd(), 'file')
-          end
-          return cached_program
-        end,
-        stopAtEntry = true,
-        externalConsole = false,
-        setupCommands = {
-          {
-            text = "-enable-pretty-printing",
-            description = "enable pretty printing",
-            ignoreFailures = false
-          }
-        },
-      }
-    }
-
-    dap.configurations.c = {
-      {
-        -- If you get an "Operation not permitted" error using this, try disabling YAMA:
-        --  echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
-        name = "Launch",
-        type = "cppdbg", -- Adjust this to match your adapter name (`dap.adapters.<name>`)
-        request = "launch",
-        pid = require("dap.utils").launch,
-        program = function()
-          return cached_program
-        end,
-        cwd = '${workspaceFolder}',
-        args = function()
-          return dap_args.get()
-        end,
-      },
-    }
-
     vim.fn.sign_define('DapBreakpoint', { text = '🔴', texthl = '', linehl = '', numhl = '' })
     vim.fn.sign_define('DapBreakpointCondition', { text = '🟡', texthl = '', linehl = '', numhl = '' })
     vim.fn.sign_define('DapBreakpointRejected', { text = '⚪', texthl = '', linehl = '', numhl = '' })
     vim.fn.sign_define('DapLogPoint', { text = '🔵', texthl = '', linehl = '', numhl = '' })
-
-    vim.keymap.set("n", "<F4>", function() dap.continue() end)
+    vim.keymap.set("n", "<F5>", function()
+      dap.configurations.c = nil
+      dap.configurations.cpp = nil
+      -- vscode.load_launchjs(nil, { cppdbg = { 'c', 'cpp' } })
+      dap.continue()
+    end)
     vim.keymap.set("n", "<F9>", function() dap.toggle_breakpoint() end)
     vim.keymap.set("n", "<F10>", function() dap.step_over() end)
     vim.keymap.set("n", "<F11>", function() dap.step_into() end)
     vim.keymap.set("n", "<F12>", function() dap.step_out() end)
-
     wk.add({
       {
         mode = { "n" },

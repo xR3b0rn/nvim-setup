@@ -3,9 +3,8 @@
 --   1. it always spans the full width at the very bottom of the tabpage,
 --      instead of appearing as a split wedged between other windows.
 --   2. jumping to an entry (<CR>/double-click/`o`) opens the file in the
---      window that was active right before the quickfix window opened, but
---      never in a dap/dapui window, so the debugger layout never gets
---      clobbered.
+--      window that was active most recently, but never in a dap/dapui
+--      window, so the debugger layout never gets clobbered.
 
 local group = vim.api.nvim_create_augroup("CustomQuickfix", { clear = true })
 
@@ -58,10 +57,8 @@ local function is_usable_target(win, exclude)
 end
 
 local function find_target_window(exclude)
-  -- Vim's own "alternate window" reliably still points at the window that
-  -- was active right before the quickfix window opened, even though :copen
-  -- internally hops through window 1 while it looks for an existing
-  -- quickfix window (which would otherwise corrupt a naive MRU stack).
+  -- Vim's own "alternate window" is usually the window that was active
+  -- right before the current one.
   local alt = vim.fn.win_getid(vim.fn.winnr("#"))
   if is_usable_target(alt, exclude) then
     return alt
@@ -79,13 +76,16 @@ local function find_target_window(exclude)
   return nil
 end
 
+-- Deliberately not cached: the target window is (re-)computed fresh on
+-- every jump instead of once when the quickfix window was opened. Caching
+-- it at open-time is fragile -- e.g. `wincmd J` below can make Vim briefly
+-- refocus another window while it repositions the quickfix window, which
+-- would corrupt a captured value with whatever window Vim's internal
+-- window-tree traversal happens to touch during that reposition.
 local function open_entry(close)
   local qf_win = vim.api.nvim_get_current_win()
   local idx = vim.fn.line(".")
-  local target = vim.w[qf_win].qf_target_win
-  if not is_usable_target(target, qf_win) then
-    target = find_target_window(qf_win)
-  end
+  local target = find_target_window(qf_win)
   if not target then
     vim.notify("quickfix: no suitable window to open the entry in", vim.log.levels.WARN)
     return
@@ -101,9 +101,6 @@ vim.api.nvim_create_autocmd("FileType", {
   group = group,
   pattern = "qf",
   callback = function(args)
-    local qf_win = vim.api.nvim_get_current_win()
-    vim.w[qf_win].qf_target_win = find_target_window(qf_win)
-
     vim.cmd("wincmd J")
     vim.wo.winfixheight = true
 

@@ -75,6 +75,7 @@ vim.diagnostic.config({
 })
 
 require("dap_args").setup_commands()
+require("setup.quickfix")
 
 local conceal_group = vim.api.nvim_create_augroup("ConcealMath", { clear = true })
 

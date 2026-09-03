@@ -1,7 +1,9 @@
 -- Make the quickfix window behave predictably no matter which plugin opened
 -- it (`:copen`, cmake-tools, overseer's on_output_quickfix, ...):
 --   1. it always spans the full width at the very bottom of the tabpage,
---      instead of appearing as a split wedged between other windows.
+--      instead of appearing as a split wedged between other windows -- except
+--      during an active debug session, where forcing that reshapes dapui's
+--      docked panels too and its size drifts further off with each build.
 --   2. jumping to an entry (<CR>/double-click/`o`) opens the file in the
 --      window that was active most recently, but never in a dap/dapui
 --      window, so the debugger layout never gets clobbered.
@@ -97,10 +99,27 @@ local function open_entry(close)
   vim.cmd(idx .. "cc")
 end
 
+local is_dap_active = require("dap_state").is_dap_active
+
 vim.api.nvim_create_autocmd("FileType", {
   group = group,
   pattern = "qf",
   callback = function(args)
+    if is_dap_active() then
+      -- Capturing dap panel sizes here and restoring them after close
+      -- doesn't work:
+      -- by the time this FileType autocmd fires, the window this hooks into
+      -- already exists and its siblings have already been shrunk to make
+      -- room for it (there's no earlier hook to intervene before that
+      -- happens). Closing immediately at least stops it from growing
+      -- further; see cmake-tools.lua for the actual fix, which stops the
+      -- window from being created in the first place during cmake builds.
+      vim.api.nvim_win_close(0, true)
+      return
+    end
+
+    -- `wincmd J` forces full-width bottom placement (like closing the
+    -- window and reopening it in the new position).
     vim.cmd("wincmd J")
     vim.wo.winfixheight = true
 

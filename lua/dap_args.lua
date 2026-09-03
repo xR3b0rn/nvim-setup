@@ -40,13 +40,6 @@ function M.show()
   })
 end
 
-function M.add(arg)
-  if not arg or vim.trim(arg) == "" then
-    return
-  end
-  table.insert(M.args, vim.trim(arg))
-end
-
 function M.setup_commands()
   vim.api.nvim_create_user_command("ArgsAdd", function(opts)
     M.add(opts.args)

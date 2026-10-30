@@ -52,8 +52,12 @@ local function is_usable_target(win, exclude)
   if vim.api.nvim_win_get_tabpage(win) ~= vim.api.nvim_get_current_tabpage() then
     return false
   end
-  if vim.bo[vim.api.nvim_win_get_buf(win)].buftype == "quickfix" then
+  local buftype = vim.bo[vim.api.nvim_win_get_buf(win)].buftype
+  if buftype == "quickfix" or buftype == "terminal" then
     return false
+  end
+  if vim.api.nvim_win_get_config(win).relative ~= "" then
+    return false -- floating window
   end
   return not is_dap_window(win)
 end
@@ -135,3 +139,9 @@ vim.api.nvim_create_autocmd("FileType", {
     end)
   end,
 })
+
+-- Also used by the cmake build terminal (lua/build_term.lua) to jump to
+-- compiler errors the same way.
+return {
+  find_target_window = find_target_window,
+}

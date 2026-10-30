@@ -6,14 +6,21 @@ return {
   config = function()
     local cmake = require("cmake-tools")
     local overseer = require("overseer")
+    -- must exist before setup(), which checks the executor is installed
+    require("cmake-tools.executors").build = require("build_term")
     cmake.setup {
+      -- -j$(nproc)
+      cmake_build_options = { "-j", tostring(vim.uv.available_parallelism()) },
+      -- "build" is our own toggleterm-based executor (lua/build_term.lua),
+      -- registered above. Builds always run in the background; the opts only
+      -- apply when the output is opened by hand (:CMakeOpenExecutor).
       cmake_executor = {
-        name = "quickfix",
+        name = "build",
+        opts = {},
         default_opts = {
-          toggleterm = {
-            show                    = "only_on_error",
-            position                = "bottom",
-            auto_close_when_success = true,
+          build = {
+            direction = "horizontal",
+            size      = 12,
           },
         },
       },
@@ -45,39 +52,23 @@ return {
       },
     }
 
-    -- cmake.debug() always builds first, even when only the BufWritePost
-    -- autocmd below is skipped -- and that build uses this same "quickfix"
-    -- executor with show="always". Opening the quickfix window while dapui
-    -- is up permanently shrinks one of its docked panels (see
-    -- lua/setup/quickfix.lua for why that can't be undone after the fact),
-    -- so it's suppressed here at the source instead, for every build
-    -- regardless of what triggered it.
-    local qf_executor = require("cmake-tools.quickfix")
-    local qf_executor_show = qf_executor.show
-    qf_executor.show = function(opts)
-      if require("dap_state").is_dap_active() then
-        return
-      end
-      return qf_executor_show(opts)
-    end
+    -- Alt+\ next to toggleterm's <c-\>: build output as a float
+    vim.keymap.set({ "n", "i", "t" }, "<M-\\>", function()
+      vim.cmd("stopinsert")
+      require("build_term").toggle("float")
+    end, { silent = true, desc = "Toggle build output (float)" })
 
     if cmake.is_cmake_project() then
       vim.api.nvim_create_autocmd("BufWritePost", {
         pattern = { "*.cpp", "*.cc", "*.cxx", "*.c", "*.h", "*.hpp" },
         callback = function()
-          -- Building on every save doesn't affect the process already
-          -- running under the debugger, and opening the quickfix window
-          -- while dapui's docked panels are up visibly disturbs their
-          -- layout (Vim shrinks them to make room and doesn't fully give
-          -- that space back once the quickfix window closes again -- it
-          -- compounds with every save). Skip the auto-build while
-          -- debugging; save again once the session ends if needed.
-          if require("dap_state").is_dap_active() then
-            return
-          end
+          -- Also runs while debugging: the build happens in the background
+          -- (lua/build_term.lua) and never opens a window, so dapui's
+          -- layout isn't disturbed.
           cmake.stop_executor()
           cmake.build({ target = "all" }, function(succ)
-            if succ == true then
+            -- a docked split would disturb dapui's layout
+            if succ == true and not require("dap_state").is_dap_active() then
               overseer.toggle()
             end
           end)

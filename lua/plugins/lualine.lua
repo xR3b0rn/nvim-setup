@@ -263,6 +263,31 @@ return {
       end
     }
 
+    -- Status of the background build (lua/build_term.lua): spinner and
+    -- progress while running, then a green ✓ or a red ✗. Click to toggle
+    -- the build output.
+    ins_left {
+      function()
+        return require("build_term").status() or ""
+      end,
+      cond = function()
+        return cmake.is_cmake_project() and require("build_term").state ~= nil
+      end,
+      color = function()
+        local state = require("build_term").state
+        if state == "failed" then
+          return { fg = colors.red, gui = "bold" }
+        elseif state == "success" then
+          return { fg = colors.green, gui = "bold" }
+        end
+        return { fg = colors.yellow }
+      end,
+      padding = { left = 0, right = 1 },
+      on_click = function()
+        require("build_term").toggle()
+      end
+    }
+
     ins_left {
       function()
         local b_preset = cmake.get_build_preset()

@@ -11,6 +11,9 @@ return {
     -- Credited to [evil_lualine](https://github.com/nvim-lualine/lualine.nvim/blob/master/examples/evil_lualine.lua)
     local conditions = {
       buffer_not_empty = function()
+        if vim.bo.filetype == "oil" then
+          return true
+        end
         return vim.fn.empty(vim.fn.expand("%:t")) ~= 1
       end,
       hide_in_width = function()
@@ -176,7 +179,14 @@ return {
     }
 
     ins_left {
-      "filename",
+      function()
+        local bufname = vim.api.nvim_buf_get_name(0)
+        local oil_path = bufname:match("^oil://(.*)$")
+        if oil_path then
+          return "oil://" .. vim.fn.fnamemodify(oil_path, ":~")
+        end
+        return vim.fn.expand("%:p:~")
+      end,
       cond = conditions.buffer_not_empty,
       color = { fg = colors.magenta, gui = "bold" },
     }

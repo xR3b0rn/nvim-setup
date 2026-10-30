@@ -8,12 +8,22 @@ return {
     {
       "<leader>fg",
       function()
-        local ok, oil = pcall(require, "oil")
-        local cwd = ok and oil.get_current_dir() or nil
-        if not cwd then
+        local cwd
+        if vim.bo.filetype == "oil" then
+          local ok, oil = pcall(require, "oil")
+          if ok then
+            cwd = oil.get_current_dir()
+          end
+        else
           cwd = vim.fn.expand("%:p:h")
         end
-        require('telescope').extensions.live_grep_args.live_grep_args { cwd = cwd }
+        cwd = cwd or vim.fn.getcwd()
+        cwd = cwd:gsub("^oil://", "")
+        cwd = vim.fn.fnamemodify(cwd, ":p")
+        cwd = cwd:gsub("[/\\]$", "")
+        require('telescope').extensions.live_grep_args.live_grep_args({
+          search_dirs = { cwd }
+        })
       end,
       mode = { "n" },
       desc = "Live grep args (inkl. Oil Integration)"
@@ -29,8 +39,6 @@ return {
   },
   config = function()
     local t = require('telescope')
-    t.load_extension('git_grep')
-    t.load_extension("live_grep_args")
     local lga_actions = require("telescope-live-grep-args.actions")
     t.setup {
       extensions = {
@@ -49,5 +57,7 @@ return {
         }
       }
     }
+    t.load_extension('git_grep')
+    t.load_extension("live_grep_args")
   end,
 }

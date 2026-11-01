@@ -19,6 +19,11 @@ return {
         "rust_analyzer",
         "clangd"
       },
+      -- rustaceanvim starts rust-analyzer itself; letting mason-lspconfig
+      -- also vim.lsp.enable() it results in two attached clients.
+      automatic_enable = {
+        exclude = { "rust_analyzer" },
+      },
     })
   end,
 }

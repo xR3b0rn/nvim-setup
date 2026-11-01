@@ -10,10 +10,10 @@ return {
     { "<leader>fr", require('telescope.builtin').lsp_references, desc = "references" },
   },
   config = function()
-    require("nvim-treesitter.config").setup {
+    require("nvim-treesitter.configs").setup {
       indent = { enable = true },
       -- A list of parser names, or "all" (the five listed parsers should always be installed)
-      ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "cpp", "javascript", "rust" },
+      ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "cpp", "javascript", "rust", "markdown", "markdown_inline" },
       -- Install parsers synchronously (only applied to `ensure_installed`)
       sync_install = false,
       -- Automatically install missing parsers when entering buffer
